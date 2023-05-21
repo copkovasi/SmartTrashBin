@@ -6,7 +6,7 @@
         <div class="tool-tip">
           <Tooltip class="tooltip-style " :fitContent="true">
 
-             Smart Trash Bin
+            Smart Trash Bin
           </Tooltip>
         </div>
       </div>
@@ -22,7 +22,7 @@
                     viewBox="0 0 16 16">
                     <path
                       d="M14 3a.702.702 0 0 1-.037.225l-1.684 10.104A2 2 0 0 1 10.305 15H5.694a2 2 0 0 1-1.973-1.671L2.037 3.225A.703.703 0 0 1 2 3c0-1.105 2.686-2 6-2s6 .895 6 2zM3.215 4.207l1.493 8.957a1 1 0 0 0 .986.836h4.612a1 1 0 0 0 .986-.836l1.493-8.957C11.69 4.689 9.954 5 8 5c-1.954 0-3.69-.311-4.785-.793z" />
-                  </svg>  HCSR04 % {{ doluluk }}
+                  </svg> HCSR04 % {{ doluluk }}
                 </Tooltip>
               </div>
               <img id="kamera" ref="kamera" :width="160" :height="160">
@@ -105,10 +105,10 @@
             </Tooltip>
           </div>
           <div class="button-level-style">
-            <Button v-bind:class="{'p-button-danger':fan_speed==0}" @click="insertvalue('fan_level', 0)">kapalı</Button>
-            <Button v-bind:class="{'p-button-danger':fan_speed==1}"  @click="insertvalue('fan_level', 1)">düşük</Button>
-            <Button v-bind:class="{'p-button-danger':fan_speed==2}"  @click="insertvalue('fan_level', 2)">orta</Button>
-            <Button v-bind:class="{'p-button-danger':fan_speed==3}"  @click="insertvalue('fan_level', 3)">yüksek</Button>
+            <Button v-bind:class="{ 'p-button-danger': fan_speed == 0 }" @click="insertvalue('fan_level', 0)">Kapalı</Button>
+            <Button v-bind:class="{ 'p-button-danger': fan_speed == 1 }" @click="insertvalue('fan_level', 1)">Düşük</Button>
+            <Button v-bind:class="{ 'p-button-danger': fan_speed == 2 }" @click="insertvalue('fan_level', 2)">Orta</Button>
+            <Button v-bind:class="{ 'p-button-danger': fan_speed == 3 }" @click="insertvalue('fan_level', 3)">Yüksek</Button>
 
           </div>
 
@@ -128,10 +128,10 @@
 
           </div>
           <div class="button-level-style">
-            <Button v-bind:class="{'p-button-danger':Servo_speed==0}"  @click="insertvalue('servo_level', 0)">Kapalı</Button>
-            <Button v-bind:class="{'p-button-danger':Servo_speed==1}" @click="insertvalue('servo_level', 1)">Düşük</Button>
-            <Button v-bind:class="{'p-button-danger':Servo_speed==2}" @click="insertvalue('servo_level', 2)">Orta</Button>
-            <Button v-bind:class="{'p-button-danger':Servo_speed==3}" @click="insertvalue('servo_level', 3)">Yüksek</Button>
+            <Button v-bind:class="{ 'p-button-danger': Servo_speed == 0 }" @click="insertvalue('servo_level', 0)">Aç</Button>
+            <Button v-bind:class="{ 'p-button-danger': Servo_speed == 1 }" @click="insertvalue('servo_level', 1)">Kapat Yavaş</Button>
+            <Button v-bind:class="{ 'p-button-danger': Servo_speed == 2 }" @click="insertvalue('servo_level', 2)">Kapat Orta</Button>
+            <Button v-bind:class="{ 'p-button-danger': Servo_speed == 3 }" @click="insertvalue('servo_level', 3)">Kapat Hızlı</Button>
 
 
           </div>
@@ -152,10 +152,13 @@
             </Tooltip>
           </div>
           <div class="button-level-style">
-            <Button v-bind:class="{'p-button-danger':light_level==0}" @click="insertvalue('light_level', 0)">Kapalı</Button>
-            <Button v-bind:class="{'p-button-danger':light_level==1}" @click="insertvalue('light_level', 1)">Düşük</Button>
-            <Button v-bind:class="{'p-button-danger':light_level==2}" @click="insertvalue('light_level', 2)">Orta</Button>
-            <Button v-bind:class="{'p-button-danger':light_level==3}" @click="insertvalue('light_level', 3)">Yüksek</Button>
+            <Button v-bind:class="{ 'p-button-danger': light_level == 0 }"
+              @click="insertvalue('light_level', 0)">Kapalı</Button>
+            <Button v-bind:class="{ 'p-button-danger': light_level == 1 }"
+              @click="insertvalue('light_level', 1)">Düşük</Button>
+            <Button v-bind:class="{ 'p-button-danger': light_level == 2 }" @click="insertvalue('light_level', 2)">Orta</Button>
+            <Button v-bind:class="{ 'p-button-danger': light_level == 3 }"
+              @click="insertvalue('light_level', 3)">Yüksek</Button>
           </div>
 
 
@@ -202,6 +205,7 @@ import Message from 'primevue/message';
 import Button from 'primevue/button';
 import { initializeApp } from 'firebase/app';
 import { getDatabase, ref, onValue, set } from 'firebase/database';
+import axios from 'axios';
 
 export default {
   name: 'App',
@@ -215,20 +219,20 @@ export default {
   watch: {
     gazvalue(newVal) {
       console.log(newVal)
-      if (newVal < 33) {
+      if (newVal < 25) {
         this.gazshowMessage = true;
         this.gazseverity = 'warn'
-        this.gazuyari = "düşük"
+        this.gazuyari = "Düşük"
       }
-      else if (newVal >= 33 && newVal < 75) {
+      else if (newVal >= 25 && newVal < 150) {
         this.gazshowMessage = true;
         this.gazseverity = 'info'
-        this.gazuyari = "orta"
+        this.gazuyari = "Orta"
       }
       else {// if (newVal >= 75) {
         this.gazshowMessage = true;
         this.gazseverity = 'error'
-        this.gazuyari = "yüksek"
+        this.gazuyari = "Yüksek"
       }
 
     },
@@ -236,17 +240,17 @@ export default {
       if (newVal < 256) {
         this.o2showMessage = true;
         this.o2severity = 'warn'
-        this.o2uyari = "düşük"
+        this.o2uyari = "Düşük"
       }
       else if (newVal >= 256 && newVal < 768) {
         this.o2showMessage = true;
         this.o2severity = 'info'
-        this.o2uyari = "orta"
+        this.o2uyari = "Orta"
       }
       else {
         this.o2showMessage = true;
         this.o2severity = 'error'
-        this.o2uyari = "yüksek"
+        this.o2uyari = "Yüksek"
       }
 
     }
@@ -254,6 +258,11 @@ export default {
   },
   data() {
     return {
+      mail: {
+        toEmail: '',
+        subject: '',
+        content: ''
+      },
       kamera: {
         en: 320,
         boy: 320,
@@ -277,9 +286,9 @@ export default {
       o2showMessage: false,
       gazshowMessage: false,
       o2severity: "warn",
-      o2uyari: "düşük",
+      o2uyari: "Düşük",
       gazseverity: "warn",
-      gazuyari: "düşük",
+      gazuyari: "Düşük",
 
       yerIstasyonuWebsocket: null,
       websocketBaglantiTimeout: 5000, // 5 sn
@@ -322,157 +331,188 @@ export default {
   mounted() {
 
     this.parsedata();
+    this.takephoto();
 
   },
   methods: {
-    addlog(level, message) {
-      var date = new Date()
-      this.logList.push({
-        datetime: date,
-        level: level,
-        message: message
-      });
-    },
-    parsedata() {
-      const app = initializeApp(this.firebaseConfig);
-      const database = getDatabase(app);
-      const arduino = ref(database, '/arduino');
+    sendEmail(event) {
+      event.preventDefault();
 
-      // Değişiklikleri dinle
-      onValue(arduino, (snapshot) => {
-        const data = snapshot.val();
-        const parts = data.split("&");
-        const values = {};
+      // Mailgun API anahtarınızı ve alan adınızı buraya ekleyin
+      const apiKey = 'YOUR_MAILGUN_API_KEY';
+      const domain = 'YOUR_MAILGUN_DOMAIN';
 
-        parts.forEach(part => {
-          part=part.replace("G=G=","G=")
-          const sipletted = part.split("=");
-          const key=sipletted[0];
-          const value=sipletted[sipletted.length-1]
-          console.log(key);
-          console.log("value : " + value)
-          if (key == "G") {
-            this.gazvalue = parseFloat(value)
+      const emailData = {
+        from: 'yourname@example.com',
+        to: this.toEmail,
+        subject: this.subject,
+        text: this.message
+      };
+
+      axios
+        .post(`https://api.mailgun.net/v3/${domain}/messages`, emailData, {
+          auth: {
+            username: 'api',
+            password: apiKey
           }
-          else if (key == "L") {
-            this.isik_value = parseInt(value / 10)
-          }
-          else if (key == "D") {
-            this.doluluk = parseFloat(value)
-          }
-          else if (key == "LS") {
-            this.light_level = parseInt(value);
-
-          }
-          else if (key == "FS") {
-            this.fan_speed = parseInt(value);
-          }
-          else if (key == "SS") {
-            this.Servo_speed = parseInt(value);
-          }
-        });
-
-        // document.getElementById("kamera").src=data
-        // this.gazvalue=data
-        // Verileri kullanın veya işleyin
-      });
-    },
-
-
-    insertvalue(dbrefname, deger) {
-      // Firebase referansını oluşturun
-      const app = initializeApp(this.firebaseConfig);
-      const database = getDatabase(app);
-      const databaseRef = ref(database, '/' + dbrefname);
-      // const databaseRef = ref(database, $`/{dbrefname}`);
-
-      // Veriyi ekleyin
-      set(databaseRef,
-        deger
-      )
-        .then(() => {
-          console.log('Veri eklendi');
         })
-        .catch((error) => {
-          console.error('Veri eklenirken bir hata oluştu:', error);
+        .then(response => {
+          console.log('E-posta gönderildi:', response);
+          // Başarılı bir şekilde e-posta gönderildiğinde yapılacak işlemler
+        })
+        .catch(error => {
+          console.error('E-posta gönderilemedi:', error);
+          // E-posta gönderimi sırasında hata oluştuğunda yapılacak işlemler
         });
     },
-    takegazvalue() {
+  addlog(level, message) {
+    var date = new Date()
+    this.logList.push({
+      datetime: date,
+      level: level,
+      message: message
+    });
+  },
+  parsedata() {
+    const app = initializeApp(this.firebaseConfig);
+    const database = getDatabase(app);
+    const arduino = ref(database, '/arduino');
 
-      const app = initializeApp(this.firebaseConfig);
-      const database = getDatabase(app);
-      const espCamRef = ref(database, '/gaz_value');
+    // Değişiklikleri dinle
+    onValue(arduino, (snapshot) => {
+      const data = snapshot.val();
+      const parts = data.split("&");
+      const values = {};
 
-      // Değişiklikleri dinle
-      onValue(espCamRef, (snapshot) => {
-        const data = snapshot.val();
-        console.log(data);
-        // document.getElementById("kamera").src=data
-        this.gazvalue = data
-        // Verileri kullanın veya işleyin
+      parts.forEach(part => {
+        part = part.replace("G=G=", "G=")
+        const sipletted = part.split("=");
+        const key = sipletted[0];
+        const value = sipletted[sipletted.length - 1]
+        console.log(key);
+        console.log("value : " + value)
+        if (key == "G") {
+          this.gazvalue = parseFloat(value)
+        }
+        else if (key == "L") {
+          this.isik_value = parseInt(value / 10)
+        }
+        else if (key == "D") {
+          this.doluluk = parseFloat(value)
+        }
+        else if (key == "LS") {
+          this.light_level = parseInt(value);
+
+        }
+        else if (key == "FS") {
+          this.fan_speed = parseInt(value);
+        }
+        else if (key == "SS") {
+          this.Servo_speed = parseInt(value);
+        }
       });
 
-    },
-    takeo2value() {
-      const app = initializeApp(this.firebaseConfig);
-      const database = getDatabase(app);
-      const espCamRef = ref(database, '/oksijen_value');
+      // document.getElementById("kamera").src=data
+      // this.gazvalue=data
+      // Verileri kullanın veya işleyin
+    });
+  },
 
-      // Değişiklikleri dinle
-      onValue(espCamRef, (snapshot) => {
-        const data = snapshot.val();
 
-        // document.getElementById("kamera").src=data
-        this.o2value = data
-        // Verileri kullanın veya işleyin
+  insertvalue(dbrefname, deger) {
+    // Firebase referansını oluşturun
+    const app = initializeApp(this.firebaseConfig);
+    const database = getDatabase(app);
+    const databaseRef = ref(database, '/' + dbrefname);
+    // const databaseRef = ref(database, $`/{dbrefname}`);
+
+    // Veriyi ekleyin
+    set(databaseRef,
+      deger
+    )
+      .then(() => {
+        console.log('Veri eklendi');
+      })
+      .catch((error) => {
+        console.error('Veri eklenirken bir hata oluştu:', error);
       });
+  },
+  takegazvalue() {
 
-    },
-    takephoto() {
-      this.insertvalue("take_photo", true);
-      const app = initializeApp(this.firebaseConfig);
-      const database = getDatabase(app);
-      // Veritabanı referansını alın
-      const espCamRef = ref(database, '/esp32-cam');
+    const app = initializeApp(this.firebaseConfig);
+    const database = getDatabase(app);
+    const espCamRef = ref(database, '/gaz_value');
 
-      // Değişiklikleri dinle
-      onValue(espCamRef, (snapshot) => {
-        const data = snapshot.val();
-        // document.getElementById("kamera").src=data
-        this.$refs["kamera"].src = data
-        this.addlog("INFO", "görüntü alındı..")
-        // Verileri kullanın veya işleyin
-      });
-    },
-    gazhideMessage() {
-      this.gazshowMessage = false;
-    },
-    o2hideMessage() {
-      this.o2showMessage = false;
-    },
-    logAnlikZaman() {
-      var dt = new Date();
-      return `${dt.getHours()}:${dt.getMinutes()}:${dt.getSeconds()}.${dt.getMilliseconds()}`;
-    },
-    loglaraEkle(log) {
-      this.logs += `${log}\n`;
-      this.logList.push(log);
-      // Burdan sonrası asagi autoscroll
-      var textarea = this.$refs.logtextarea;
-      if (textarea === undefined || textarea === null)
-        return;
-      textarea.scrollTop = textarea.scrollHeight;
-      this.$forceUpdate();
-      this.logTableAsagiScroll();
-    },
-    logTableAsagiScroll() {
-      var dt = document.getElementsByClassName('ui-datatable-scrollable-body')[0];
-      if (dt === undefined || dt === null) return
-      dt.scrollTop = dt.scrollHeight - dt.clientHeight;
-    },
+    // Değişiklikleri dinle
+    onValue(espCamRef, (snapshot) => {
+      const data = snapshot.val();
+      console.log(data);
+      // document.getElementById("kamera").src=data
+      this.gazvalue = data
+      // Verileri kullanın veya işleyin
+    });
+
+  },
+  takeo2value() {
+    const app = initializeApp(this.firebaseConfig);
+    const database = getDatabase(app);
+    const espCamRef = ref(database, '/oksijen_value');
+
+    // Değişiklikleri dinle
+    onValue(espCamRef, (snapshot) => {
+      const data = snapshot.val();
+
+      // document.getElementById("kamera").src=data
+      this.o2value = data
+      // Verileri kullanın veya işleyin
+    });
+
+  },
+  takephoto() {
+    this.insertvalue("take_photo", true);
+    const app = initializeApp(this.firebaseConfig);
+    const database = getDatabase(app);
+    // Veritabanı referansını alın
+    const espCamRef = ref(database, '/esp32-cam');
+
+    // Değişiklikleri dinle
+    onValue(espCamRef, (snapshot) => {
+      const data = snapshot.val();
+      // document.getElementById("kamera").src=data
+      this.$refs["kamera"].src = data
+      this.addlog("INFO", "Görüntü alındı..")
+      // Verileri kullanın veya işleyin
+    });
+  },
+  gazhideMessage() {
+    this.gazshowMessage = false;
+  },
+  o2hideMessage() {
+    this.o2showMessage = false;
+  },
+  logAnlikZaman() {
+    var dt = new Date();
+    return `${dt.getHours()}:${dt.getMinutes()}:${dt.getSeconds()}.${dt.getMilliseconds()}`;
+  },
+  loglaraEkle(log) {
+    this.logs += `${log}\n`;
+    this.logList.push(log);
+    // Burdan sonrası asagi autoscroll
+    var textarea = this.$refs.logtextarea;
+    if (textarea === undefined || textarea === null)
+      return;
+    textarea.scrollTop = textarea.scrollHeight;
+    this.$forceUpdate();
+    this.logTableAsagiScroll();
+  },
+  logTableAsagiScroll() {
+    var dt = document.getElementsByClassName('ui-datatable-scrollable-body')[0];
+    if (dt === undefined || dt === null) return
+    dt.scrollTop = dt.scrollHeight - dt.clientHeight;
+  },
 
 
-  }
+}
 }
 </script>
 
