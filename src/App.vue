@@ -55,7 +55,7 @@
                 this.gazuyari }} değer</Message>
 
 
-              <Slider class="sliderTitle" v-model="gazvalue" :min="0" :max="100" :step="1"></Slider>
+              <Slider class="sliderTitle" v-model="gazvalue" :min="0" :max="500" :step="1"></Slider>
 
 
 
@@ -160,6 +160,8 @@
             <Button v-bind:class="{ 'p-button-danger': light_level == 3 }"
               @click="insertvalue('light_level', 3)">Yüksek</Button>
           </div>
+          
+
 
 
 
@@ -179,7 +181,9 @@
           <Column field="datetime" header="Tarih" [style]="{'width':'10px'}"></Column>
           <Column field="level" header="Seviye"></Column>
           <Column field="message" header="Mesaj"></Column>
+          
         </DataTable>
+        
 
 
 
@@ -189,6 +193,25 @@
 
 
 
+      </div>
+      <div class="row">
+        <div class="card text-bg-dark mb-3">
+            <div class="card-header text-green">
+              Email Bilgisi
+            </div>
+            <div class="card-body">
+              <div class="mb-2 row align-items-center">
+                <label for="input" class="col-sm-4 col-form-label">Email</label>
+                <div class="col-sm-8">
+                  <input type="text" class="form-control form-control-sm" id="input">
+                </div>
+              </div>
+              <div class="d-grid gap-2 mt-3">
+                <a href="#" class="btn btn-success" @click="insertEmail()">Kaydet</a>
+              </div>
+
+            </div>
+          </div>
       </div>
 
     </div>
@@ -331,40 +354,11 @@ export default {
   mounted() {
 
     this.parsedata();
-    this.takephoto();
+    // this.takephoto();
 
   },
   methods: {
-    sendEmail(event) {
-      event.preventDefault();
-
-      // Mailgun API anahtarınızı ve alan adınızı buraya ekleyin
-      const apiKey = 'YOUR_MAILGUN_API_KEY';
-      const domain = 'YOUR_MAILGUN_DOMAIN';
-
-      const emailData = {
-        from: 'yourname@example.com',
-        to: this.toEmail,
-        subject: this.subject,
-        text: this.message
-      };
-
-      axios
-        .post(`https://api.mailgun.net/v3/${domain}/messages`, emailData, {
-          auth: {
-            username: 'api',
-            password: apiKey
-          }
-        })
-        .then(response => {
-          console.log('E-posta gönderildi:', response);
-          // Başarılı bir şekilde e-posta gönderildiğinde yapılacak işlemler
-        })
-        .catch(error => {
-          console.error('E-posta gönderilemedi:', error);
-          // E-posta gönderimi sırasında hata oluştuğunda yapılacak işlemler
-        });
-    },
+    
   addlog(level, message) {
     var date = new Date()
     this.logList.push({
@@ -466,6 +460,11 @@ export default {
       this.o2value = data
       // Verileri kullanın veya işleyin
     });
+
+  },
+  insertEmail(){
+    var inputElement = document.getElementById('input');
+    this.insertvalue('Email',inputElement.value)
 
   },
   takephoto() {
