@@ -6,7 +6,7 @@
         <div class="tool-tip">
           <Tooltip class="tooltip-style " :fitContent="true">
 
-            Smart Trash Bin
+            Smart Trash Can
           </Tooltip>
         </div>
       </div>
@@ -203,7 +203,7 @@
               <div class="mb-2 row align-items-center">
                 <label for="input" class="col-sm-4 col-form-label">Email</label>
                 <div class="col-sm-8">
-                  <input type="text" class="form-control form-control-sm" id="input">
+                  <input type="text" class="form-control form-control-sm" id="input" v-model="Email">
                 </div>
               </div>
               <div class="d-grid gap-2 mt-3">
@@ -304,23 +304,15 @@ export default {
       light_level: null,
       fan_speed: null,
       Servo_speed: null,
-
-
+      Email:null,
       o2showMessage: false,
       gazshowMessage: false,
       o2severity: "warn",
       o2uyari: "Düşük",
       gazseverity: "warn",
       gazuyari: "Düşük",
-
-      yerIstasyonuWebsocket: null,
-      websocketBaglantiTimeout: 5000, // 5 sn
-
-      yerIstasyonuBagli: false,
-      hakemSunucuBagli: false,
-      ihaDurum: 'Bilgi yok',
-      yarismaSuresi: 'Bilgi yok', // Nasi yapilir ? Sunucudan da gelebilir.
-
+    
+   
       msg: '',
       response: '',
       logs: '',
@@ -348,13 +340,14 @@ export default {
     }
   },
   created() {
-
+  
 
   },
   mounted() {
 
     this.parsedata();
     // this.takephoto();
+    this.takeEmail();
 
   },
   methods: {
@@ -482,6 +475,22 @@ export default {
       this.addlog("INFO", "Görüntü alındı..")
       // Verileri kullanın veya işleyin
     });
+  },
+  takeEmail(){
+    const app = initializeApp(this.firebaseConfig);
+    const database = getDatabase(app);
+    // Veritabanı referansını alın
+    const espCamRef = ref(database, '/Email');
+
+    // Değişiklikleri dinle
+    onValue(espCamRef, (snapshot) => {
+      const data = snapshot.val();
+      // document.getElementById("kamera").src=data
+      this.Email = data
+      
+      // Verileri kullanın veya işleyin
+    });
+
   },
   gazhideMessage() {
     this.gazshowMessage = false;
